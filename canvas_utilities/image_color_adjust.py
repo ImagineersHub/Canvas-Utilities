@@ -1,19 +1,31 @@
 from .image_utils import load_image
 from PIL import Image
-import cv2
 import numpy as np
 
 
 @load_image
-def adjust_image_color_curve(data, lut_in=[0, 85, 160, 255], lut_out=[0, 66, 180, 255], output=None, is_grayscale=True):
-    numpy_image = np.array(data)
-    opencv_image = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
+def adjust_image_color_curve_pil(data, lut_in=[0, 85, 160, 255], lut_out=[0, 66, 180, 255], output=None, is_grayscale=True):
+    # Ensure data is a PIL Image
+    if not isinstance(data, Image.Image):
+        data = Image.fromarray(data)
 
-    lut_8u = np.interp(np.arange(0, 256), lut_in, lut_out).astype(np.uint8)
-    image_contrasted = cv2.LUT(opencv_image, lut_8u)
+    # Convert the image to RGB if it's not
+    if data.mode != 'RGB':
+        data = data.convert('RGB')
 
+    # Prepare the LUT (lookup table) for color curve adjustment
+    lut = np.interp(np.arange(256), lut_in, lut_out).astype(np.uint8)
+    
+    # Apply LUT to each channel of the image
+    channels = [Image.fromarray(lut[np.array(data.getchannel(ch))]) for ch in ['R', 'G', 'B']]
+    image_contrasted = Image.merge('RGB', channels)
+
+    # Convert to grayscale if required
+    if is_grayscale:
+        image_contrasted = image_contrasted.convert('L')
+
+    # Save the image if an output path is provided
     if output:
-        cv2.imwrite(output, image_contrasted)
+        image_contrasted.save(output)
 
-    img = cv2.cvtColor(image_contrasted, cv2.IMREAD_GRAYSCALE if is_grayscale else cv2.COLOR_BGR2RGB)
-    return Image.fromarray(img)
+    return image_contrasted

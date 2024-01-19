@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     # How you named your package folder (MyLib)
     name='canvas_utilities',
-    version='0.1.1',      # Start with a small number and increase it with every change you make
+    version='0.1.2',      # Start with a small number and increase it with every change you make
     # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     license='MIT',
     # Give a short description about your library
@@ -16,12 +16,11 @@ setup(
     url='https://github.com/ImagineersHub/compipe',
     # download_url='https://github.com/ImagineersHub/compipe/archive/v_01.tar.gz',    # I explain this later on
     # Keywords that define your package best
-    keywords=['python', 'cv2', 'image', 'canvas', '2d'],
+    keywords=['python', 'image', 'canvas', '2d'],
     install_requires=[            # I get to this in a second
         'pillow',
         'imagehash',
         'numpy',
-        'opencv-contrib-python',
         'imutils',
         'blend-modes',
         'scikit-image',

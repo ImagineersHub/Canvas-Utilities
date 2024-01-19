@@ -3,7 +3,7 @@ import colorsys
 from numpy import ndarray
 import io
 import os
-import cv2
+import numpy as np
 from functools import wraps
 
 import wrapt
@@ -23,18 +23,28 @@ IMAGE_FORMAT_MAPPING = {
 }
 
 
-def grayscale_image_darkness(img: ndarray):
-    """Calculate the image darkness value.
+def grayscale_image_darkness_pil(img):
+    """Calculate the image darkness value using PIL.
 
     Args:
-        img (ndarray): Represent the grayscale image data.
+        img (PIL.Image.Image or ndarray): The grayscale image data.
 
     Returns:
         float: Represent the mean value
     """
-    # blur = cv2.blur(img, (5, 5))
-    return cv2.mean(img)[0] / 255
+    # Ensure img is a PIL Image
+    if not isinstance(img, Image.Image):
+        img = Image.fromarray(img)
 
+    # Convert to grayscale if not already
+    if img.mode != 'L':
+        img = img.convert('L')
+
+    # Calculate the mean pixel value
+    numpy_image = np.array(img)
+    mean_value = numpy_image.mean() / 255
+
+    return mean_value
 
 @wrapt.decorator
 def load_image(wrapped, instance, args, kwargs):

@@ -1,7 +1,6 @@
 pillow
 imagehash
 numpy
-opencv-contrib-python
 imutils
 blend-modes
 scikit-image
