@@ -23,6 +23,18 @@ IMAGE_FORMAT_MAPPING = {
 }
 
 
+def grayscale_image_darkness(img: np.ndarray) -> float:
+    """Calculate the image darkness value.
+
+    Args:
+        img (np.ndarray): Represent the grayscale image data.
+
+    Returns:
+        float: Represent the mean value
+    """
+    return np.mean(img) / 255
+
+
 def grayscale_image_darkness_pil(img):
     """Calculate the image darkness value using PIL.
 
@@ -45,6 +57,7 @@ def grayscale_image_darkness_pil(img):
     mean_value = numpy_image.mean() / 255
 
     return mean_value
+
 
 @wrapt.decorator
 def load_image(wrapped, instance, args, kwargs):
